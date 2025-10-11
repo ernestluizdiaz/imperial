@@ -1,13 +1,6 @@
 "use client";
 import React from "react";
-import {
-	Bar,
-	BarChart,
-	CartesianGrid,
-	XAxis,
-	YAxis,
-	ResponsiveContainer,
-} from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
 	ChartConfig,
 	ChartContainer,
@@ -18,6 +11,7 @@ import {
 } from "@/components/ui/chart";
 import { Menu } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { useMenu } from "../../(components)/menuContext";
 
 // Custom hook to detect mobile mode
 function useIsMobile() {
@@ -37,7 +31,8 @@ function useIsMobile() {
 	return isMobile;
 }
 
-const Dashboard = ({ openMenu }: { openMenu?: () => void }) => {
+const Dashboard = () => {
+	const { setOpen } = useMenu();
 	const isMobile = useIsMobile();
 	const chartData = [
 		{ month: "January", gcash: 186, cash: 80 },
@@ -105,12 +100,11 @@ const Dashboard = ({ openMenu }: { openMenu?: () => void }) => {
 	return (
 		<div className="flex flex-col py-10 px-5 bg-white gap-6">
 			{/* Header */}
-			<div className="flex items-center justify-between ">
+			<div className="flex items-center justify-between">
 				<h1 className="text-2xl font-bold">Dashboard</h1>
 				<button
-					onClick={openMenu}
+					onClick={() => setOpen(true)}
 					className="p-2 lg:hidden rounded-md hover:bg-gray-100"
-					aria-label="Open menu"
 				>
 					<Menu size={24} />
 				</button>
@@ -150,82 +144,76 @@ const Dashboard = ({ openMenu }: { openMenu?: () => void }) => {
 						config={chartConfig}
 						className="w-full h-full"
 					>
-						<ResponsiveContainer width="100%" height="100%">
-							{isMobile ? (
-								<BarChart
-									layout="vertical"
-									data={chartData}
-									margin={{
-										top: 10,
-										right: 20,
-										bottom: 20,
-										left: -20,
-									}}
-								>
-									<CartesianGrid horizontal={false} />
-									<YAxis
-										type="category"
-										dataKey="month"
-										tickLine={false}
-										tickMargin={10}
-										axisLine={false}
-										tickFormatter={(v) => v.slice(0, 3)}
-									/>
-									<XAxis type="number" />
-									<ChartTooltip
-										content={<ChartTooltipContent />}
-									/>
-									<ChartLegend
-										content={<ChartLegendContent />}
-									/>
-									<Bar
-										dataKey="gcash"
-										fill="var(--color-gcash)"
-										radius={4}
-									/>
-									<Bar
-										dataKey="cash"
-										fill="var(--color-cash)"
-										radius={4}
-									/>
-								</BarChart>
-							) : (
-								<BarChart
-									data={chartData}
-									margin={{
-										top: 20,
-										right: 20,
-										bottom: 20,
-										left: 20,
-									}}
-								>
-									<CartesianGrid vertical={false} />
-									<XAxis
-										dataKey="month"
-										tickLine={false}
-										tickMargin={10}
-										axisLine={false}
-										tickFormatter={(v) => v.slice(0, 3)}
-									/>
-									<ChartTooltip
-										content={<ChartTooltipContent />}
-									/>
-									<ChartLegend
-										content={<ChartLegendContent />}
-									/>
-									<Bar
-										dataKey="gcash"
-										fill="var(--color-gcash)"
-										radius={4}
-									/>
-									<Bar
-										dataKey="cash"
-										fill="var(--color-cash)"
-										radius={4}
-									/>
-								</BarChart>
-							)}
-						</ResponsiveContainer>
+						{isMobile ? (
+							<BarChart
+								layout="vertical"
+								data={chartData}
+								margin={{
+									top: 10,
+									right: 20,
+									bottom: 20,
+									left: -20,
+								}}
+							>
+								<CartesianGrid horizontal={false} />
+								<YAxis
+									type="category"
+									dataKey="month"
+									tickLine={false}
+									tickMargin={10}
+									axisLine={false}
+									tickFormatter={(v) => v.slice(0, 3)}
+								/>
+								<XAxis type="number" />
+								<ChartTooltip
+									content={<ChartTooltipContent />}
+								/>
+								<ChartLegend content={<ChartLegendContent />} />
+								<Bar
+									dataKey="gcash"
+									fill="var(--color-gcash)"
+									radius={4}
+								/>
+								<Bar
+									dataKey="cash"
+									fill="var(--color-cash)"
+									radius={4}
+								/>
+							</BarChart>
+						) : (
+							<BarChart
+								data={chartData}
+								margin={{
+									top: 20,
+									right: 20,
+									bottom: 20,
+									left: 20,
+								}}
+							>
+								<CartesianGrid vertical={false} />
+								<XAxis
+									dataKey="month"
+									tickLine={false}
+									tickMargin={10}
+									axisLine={false}
+									tickFormatter={(v) => v.slice(0, 3)}
+								/>
+								<ChartTooltip
+									content={<ChartTooltipContent />}
+								/>
+								<ChartLegend content={<ChartLegendContent />} />
+								<Bar
+									dataKey="gcash"
+									fill="var(--color-gcash)"
+									radius={4}
+								/>
+								<Bar
+									dataKey="cash"
+									fill="var(--color-cash)"
+									radius={4}
+								/>
+							</BarChart>
+						)}
 					</ChartContainer>
 				</div>
 			</div>
