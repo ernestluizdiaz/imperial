@@ -1,5 +1,3 @@
-import Image from "next/image";
-import { AlarmClock } from "lucide-react";
 import SideNav from "./(components)/sidenav";
 export default function Home() {
 	return (
