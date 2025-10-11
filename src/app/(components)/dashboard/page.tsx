@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import SideNav from "./(components)/sidenav";
-import Dashboard from "./(components)/dashboard/dashboard";
+import SideNav from "../sidenav";
+import Dashboard from "./dashboard";
 
 export default function Home() {
 	const [menuOpen, setMenuOpen] = useState(false);
