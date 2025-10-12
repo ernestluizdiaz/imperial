@@ -6,9 +6,9 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
 	const { open, setOpen } = useMenu();
 
 	return (
-		<div className="flex min-h-screen">
+		<div className="flex min-h-screen overflow-x-hidden">
 			{/* Desktop Sidebar */}
-			<div className="hidden lg:block sticky top-0 w-72 flex-shrink-0">
+			<div className="hidden lg:block fixed top-0 left-0 h-screen w-72 bg-[#F4FEFF] shadow-lg">
 				<SideNav />
 			</div>
 
@@ -28,7 +28,9 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
 			)}
 
 			{/* Main Content */}
-			<main className="flex-1 overflow-x-hidden">{children}</main>
+			<main className="flex-1 ml-0 lg:ml-72 overflow-x-hidden overflow-y-auto">
+				{children}
+			</main>
 		</div>
 	);
 }

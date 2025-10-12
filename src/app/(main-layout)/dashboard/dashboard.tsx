@@ -137,7 +137,7 @@ const Dashboard = () => {
 			</div>
 
 			{/* Bar Chart */}
-			<div className="flex flex-col gap-6 w-full border p-6 pb-0 rounded-lg border-[#E4E4E7]">
+			<div className="flex flex-col gap-6 w-full border p-6 pb-0 rounded-lg border-[#E4E4E7] ">
 				<h2 className="font-medium text-black">Overview</h2>
 				<div className="w-full h-[400px]">
 					<ChartContainer
