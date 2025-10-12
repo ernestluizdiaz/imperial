@@ -67,6 +67,7 @@ const data: Customer[] = [
 ];
 
 const modalColumns: Column<Customer>[] = [
+	{ accessorKey: "id" as keyof Customer, header: "ID" },
 	{ accessorKey: "accountNo" as keyof Customer, header: "Account No." },
 	{ accessorKey: "customerName" as keyof Customer, header: "Customer Name" },
 	{ accessorKey: "phoneNumber" as keyof Customer, header: "Phone Number" },
@@ -74,6 +75,10 @@ const modalColumns: Column<Customer>[] = [
 	{ accessorKey: "status" as keyof Customer, header: "Status" },
 	{ accessorKey: "monthlyFee" as keyof Customer, header: "Monthly Fee" },
 	{ accessorKey: "remarks" as keyof Customer, header: "Remarks" },
+	{
+		accessorKey: "registeredDate" as keyof Customer,
+		header: "Registered Date",
+	},
 ];
 
 const columns = [
