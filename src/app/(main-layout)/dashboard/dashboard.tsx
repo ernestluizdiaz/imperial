@@ -117,7 +117,7 @@ const Dashboard = () => {
 						key={mode}
 						className="flex flex-col gap-5 border p-6 rounded-lg border-[#E4E4E7]"
 					>
-						<p className="font-bold text-2xl">{mode} Payment</p>
+						<p className="font-semibold text-2xl">{mode} Payment</p>
 						<p className="font-bold text-2xl">
 							{paymentStats[mode]}
 						</p>

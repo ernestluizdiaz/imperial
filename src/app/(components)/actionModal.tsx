@@ -25,6 +25,7 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover";
+import { Textarea } from "@/components/ui/textarea";
 
 type Column<T> = {
 	accessorKey?: keyof T;
@@ -44,6 +45,7 @@ type ActionModalProps<T extends Record<string, string | string[] | number>> = {
 		status?: string[];
 		technicians?: string[];
 		masterListStatus?: string[];
+		masterListRemarks?: string[];
 		paymentDate?: string[];
 		PMStatus?: string[];
 		mop?: string[];
@@ -101,6 +103,8 @@ export function ActionModal<
 		edit: "Edit Record",
 		delete: "Confirm Delete",
 	};
+
+	const [isOtherSelected, setIsOtherSelected] = React.useState(false);
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -202,23 +206,36 @@ export function ActionModal<
 													})}
 												</div>
 											) : key === "description" ? (
-												// ✅ Descriptions from props
-												<div className="mt-1">
+												<div className="mt-1 space-y-2">
 													<Select
 														onValueChange={(
 															newValue
-														) =>
+														) => {
+															// When "Other" is selected, keep "Other" in dropdown but clear form value
 															handleInputChange({
 																target: {
 																	name: key as keyof T,
-																	value: newValue,
+																	value:
+																		newValue ===
+																		"Other"
+																			? ""
+																			: newValue,
 																},
-															})
-														}
+															});
+
+															// Track locally if "Other" is selected
+															setIsOtherSelected(
+																newValue ===
+																	"Other"
+															);
+														}}
 														value={
-															formData[
-																key as keyof T
-															] as string
+															isOtherSelected
+																? "Other"
+																: (formData[
+																		key as keyof T
+																  ] as string) ||
+																  ""
 														}
 													>
 														<SelectTrigger className="w-full">
@@ -228,16 +245,54 @@ export function ActionModal<
 															{(
 																options?.descriptions ??
 																[]
-															).map((desc) => (
-																<SelectItem
-																	key={desc}
-																	value={desc}
-																>
-																	{desc}
-																</SelectItem>
-															))}
+															)
+																.filter(
+																	(desc) =>
+																		desc !==
+																		"Other"
+																)
+																.map((desc) => (
+																	<SelectItem
+																		key={
+																			desc
+																		}
+																		value={
+																			desc
+																		}
+																	>
+																		{desc}
+																	</SelectItem>
+																))}
+															<SelectItem value="Other">
+																Other
+															</SelectItem>
 														</SelectContent>
 													</Select>
+
+													{/* ✅ Show textarea when "Other" is selected */}
+													{isOtherSelected && (
+														<Textarea
+															placeholder="Enter custom description..."
+															className="mt-2"
+															onChange={(e) =>
+																handleInputChange(
+																	{
+																		target: {
+																			name: key as keyof T,
+																			value: e
+																				.target
+																				.value, // 👈 directly updates description
+																		},
+																	}
+																)
+															}
+															value={
+																formData[
+																	key as keyof T
+																] as string
+															}
+														/>
+													)}
 												</div>
 											) : key === "cost" ? (
 												// ✅ Cost from props
@@ -355,6 +410,29 @@ export function ActionModal<
 															))}
 														</SelectContent>
 													</Select>
+												</div>
+											) : key === "masterListRemarks" ? (
+												// ✅ Master List Remarks (simple textarea only)
+												<div className="mt-1">
+													<Textarea
+														placeholder="Enter master list remarks..."
+														className="mt-1"
+														onChange={(e) =>
+															handleInputChange({
+																target: {
+																	name: key as keyof T,
+																	value: e
+																		.target
+																		.value,
+																},
+															})
+														}
+														value={
+															(formData[
+																key as keyof T
+															] as string) ?? ""
+														}
+													/>
 												</div>
 											) : key === "paymentDate" ? (
 												<div className="mt-1">

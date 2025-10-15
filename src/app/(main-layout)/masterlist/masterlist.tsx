@@ -30,9 +30,9 @@ type Customer = {
 	customerName: string;
 	phoneNumber: string;
 	address: string;
-	masterListstatus: string;
+	masterListStatus: string;
 	monthlyFee: string;
-	remarks: string;
+	masterListRemarks: string;
 	registeredDate: string;
 };
 
@@ -50,9 +50,9 @@ const data: Customer[] = [
 		customerName: "Herrera, Lyka Joy",
 		phoneNumber: "639569675693",
 		address: "Block 81 Lot 7 Parkstone Estate",
-		masterListstatus: masterListStatus[0],
+		masterListStatus: masterListStatus[0],
 		monthlyFee: "₱1,000",
-		remarks: "penge barya",
+		masterListRemarks: "penge barya",
 		registeredDate: "14/06/2023",
 	},
 	{
@@ -61,9 +61,9 @@ const data: Customer[] = [
 		customerName: "Vallente, Genovela",
 		phoneNumber: "639569675693",
 		address: "Block 54 Lot 4 Hyacinth Residences",
-		masterListstatus: masterListStatus[1],
+		masterListStatus: masterListStatus[1],
 		monthlyFee: "₱800",
-		remarks: "Nagbabayad pero onti",
+		masterListRemarks: "Nagbabayad pero onti",
 		registeredDate: "19/10/2023",
 	},
 ];
@@ -74,9 +74,12 @@ const modalColumns: Column<Customer>[] = [
 	{ accessorKey: "customerName" as keyof Customer, header: "Customer Name" },
 	{ accessorKey: "phoneNumber" as keyof Customer, header: "Phone Number" },
 	{ accessorKey: "address" as keyof Customer, header: "Address" },
-	{ accessorKey: "masterListstatus" as keyof Customer, header: "Status" },
+	{ accessorKey: "masterListStatus" as keyof Customer, header: "Status" },
 	{ accessorKey: "monthlyFee" as keyof Customer, header: "Monthly Fee" },
-	{ accessorKey: "remarks" as keyof Customer, header: "Remarks" },
+	{
+		accessorKey: "masterListRemarks" as keyof Customer,
+		header: "Remarks",
+	},
 	{
 		accessorKey: "registeredDate" as keyof Customer,
 		header: "Registered Date",
@@ -105,14 +108,14 @@ const columns = [
 		header: "Address",
 	},
 	{
-		accessorKey: "masterListstatus",
+		accessorKey: "masterListStatus",
 		header: "Status",
 		cell: ({
 			row,
 		}: {
 			row: import("@tanstack/react-table").Row<Customer>;
 		}) => {
-			const status = row.original.masterListstatus;
+			const status = row.original.masterListStatus;
 			const active = status === "Active";
 			return (
 				<span
@@ -132,7 +135,7 @@ const columns = [
 		header: "Monthly Fee",
 	},
 	{
-		accessorKey: "remarks",
+		accessorKey: "masterListRemarks",
 		header: "Remarks",
 	},
 	{
@@ -225,7 +228,7 @@ const Masterlist = () => {
 				table.setSorting([{ id: "customerName", desc: false }]);
 				break;
 			case "Status":
-				table.setSorting([{ id: "masterListstatus", desc: false }]);
+				table.setSorting([{ id: "masterListStatus", desc: false }]);
 				break;
 			case "Date Created":
 				table.setSorting([{ id: "registeredDate", desc: true }]);

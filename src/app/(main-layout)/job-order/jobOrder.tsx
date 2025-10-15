@@ -51,7 +51,7 @@ const descriptions = [
 	"Downgrade",
 	"Relocation",
 	"Change modem",
-	"Others",
+	"Other",
 ];
 
 const cost = ["500", "1000", "1500", "Free"];
