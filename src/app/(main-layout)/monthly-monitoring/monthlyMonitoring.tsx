@@ -9,7 +9,13 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { ArrowDownToLine, TrendingUp, Users } from "lucide-react";
+import {
+	ArrowDownToLine,
+	TrendingUp,
+	Users,
+	Wallet,
+	RefreshCw,
+} from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 
 const months = [
@@ -43,9 +49,48 @@ const progressColors = [
 const textColors = ["text-green-500", "text-red-500", "text-gray-500"];
 const borderColors = ["border-green-500", "border-red-500", "border-gray-500"];
 
+const paymentIconBg = ["bg-[#D3FFDD]", "bg-[#CEEAF0]"];
+const modeOfPayment = [
+	"Cash Payment",
+	"GCash Payment",
+	"Cash Reconnect",
+	"GCash Reconnect",
+];
+const paymentValue = [200, 233, 542, 543];
+
+const performanceTracking = [43, 65, 76, 56];
+
+const financialOverview = [
+	"Expenses for the Month",
+	"Total Collection",
+	"Cash Office Uncollected",
+	"Grand Total",
+	"New Installation",
+	"Amount of Installation",
+];
+
+const financialOverviewValue = [342, 254, 432, 123, 453, 543];
+const progressBarValue = [43, 54, 45, 23, 54, 42];
+const financialColors = [
+	"#0C7FDA",
+	"#FF7700",
+	"#68B479",
+	"#FFC700",
+	"#9747FF",
+	"#ED254E",
+];
+const progressBarColors = [
+	"[&>div]:bg-[#0C7FDA]",
+	"[&>div]:bg-[#FF7700]",
+	"[&>div]:bg-[#68B479]",
+	"[&>div]:bg-[#FFC700]",
+	"[&>div]:bg-[#9747FF]",
+	"[&>div]:bg-[#ED254E]",
+];
+
 const MonthlyMonitoring = () => {
 	return (
-		<div className="flex flex-col py-10 px-5 bg-white gap-4">
+		<div className="flex flex-col py-10 px-5 bg-white gap-6">
 			{/* Header */}
 			<div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
 				<div className="flex flex-col items-start">
@@ -136,6 +181,96 @@ const MonthlyMonitoring = () => {
 						</div>
 					))}
 				</div>
+			</div>
+
+			<div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+				{modeOfPayment.map((mode, index) => {
+					// pick icon based on mode name
+					const isPayment = mode.includes("Payment");
+					const Icon = isPayment ? Wallet : RefreshCw;
+					// choose bg color pattern alternately
+					const bgColor = paymentIconBg[index % paymentIconBg.length];
+
+					return (
+						<div
+							key={index}
+							className="flex flex-col justify-between border border-[#E4E4E7] p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
+						>
+							<div
+								className={`w-12 h-12 flex items-center justify-center rounded-full ${bgColor}`}
+							>
+								<Icon className="w-6 h-6 text-gray-700" />
+							</div>
+
+							<div className="mt-4">
+								<p className="text-md font-medium text-gray-800">
+									{mode}
+								</p>
+								<p className="text-2xl font-bold text-gray-900 mt-1">
+									₱{paymentValue[index].toLocaleString()}
+								</p>
+							</div>
+						</div>
+					);
+				})}
+			</div>
+
+			<div className="flex flex-col border border-[#E4E4E7] p-6 rounded-lg gap-2 shadow-sm">
+				<h2 className="font-bold text-xl text-gray-800">
+					Performance Tracking
+				</h2>
+
+				<div className="flex flex-col gap-4">
+					{modeOfPayment.map((mode, index) => (
+						<div key={mode} className="flex flex-col gap-1">
+							<div className="flex justify-between text-sm font-medium text-gray-700">
+								<span>{mode}</span>
+								<span>{performanceTracking[index]}%</span>
+							</div>
+
+							<Progress
+								value={performanceTracking[index]}
+								className={
+									mode.includes("GCash")
+										? "[&>div]:bg-[#007AFF]" // Blue for GCash
+										: "[&>div]:bg-[#28A745]" // Green for Cash
+								}
+							/>
+						</div>
+					))}
+				</div>
+			</div>
+
+			<div className="grid grid-cols-2 gap-4">
+				{financialOverview.map((mode, index) => (
+					<div
+						key={mode}
+						className="flex flex-col p-6 rounded-lg gap-3 shadow-sm hover:shadow-md transition-all duration-200
+						"
+						style={{
+							borderLeft: `6px solid ${financialColors[index]}`,
+						}}
+					>
+						<div className="flex flex-col justify-between text-sm font-medium text-gray-700 gap-4">
+							<span className="font-semibold text-lg">
+								{mode}
+							</span>
+							<span className="text-2xl font-bold">
+								₱
+								{financialOverviewValue[index].toLocaleString()}
+							</span>
+						</div>
+
+						<Progress
+							value={progressBarValue[index]}
+							className={`${progressBarColors[index]}`}
+						/>
+
+						<span className="text-xs text-gray-500 text-right">
+							{progressBarValue[index]}%
+						</span>
+					</div>
+				))}
 			</div>
 		</div>
 	);
