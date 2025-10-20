@@ -35,7 +35,6 @@ type JobOrder = {
 	customerName: string;
 	address: string;
 	phoneNumber: string;
-	monthlyFee: string;
 	description: string;
 	cost: string;
 	technician: string[];
@@ -67,7 +66,6 @@ const data: JobOrder[] = [
 		customerName: "Herrera, Lyka Joy",
 		phoneNumber: "639569675693",
 		address: "Block 81 Lot 7 Parkstone Estate",
-		monthlyFee: "₱1,000",
 		description: descriptions[0],
 		cost: cost[1],
 		technician: pickTechs(0, 2),
@@ -80,7 +78,6 @@ const data: JobOrder[] = [
 		customerName: "Vallente, Genovela",
 		phoneNumber: "639569675693",
 		address: "Block 54 Lot 4 Hyacinth Residences",
-		monthlyFee: "₱800",
 		description: descriptions[1],
 		cost: cost[0],
 		technician: pickTechs(1, 3),
@@ -94,7 +91,6 @@ const data: JobOrder[] = [
 		customerName: "Santos, Mark",
 		phoneNumber: "639123456789",
 		address: "Block 10 Lot 2 Green Meadows",
-		monthlyFee: "₱1,200",
 		description: descriptions[2],
 		cost: cost[3],
 		technician: pickTechs(0, 3),
@@ -107,7 +103,6 @@ const data: JobOrder[] = [
 		customerName: "Lopez, Anna",
 		phoneNumber: "639987654321",
 		address: "Block 22 Lot 5 Blue Ridge",
-		monthlyFee: "₱900",
 		description: descriptions[3],
 		cost: cost[2],
 		technician: pickTechs(2, 3),
@@ -122,7 +117,6 @@ const modalColumns: Column<JobOrder>[] = [
 	{ accessorKey: "customerName" as keyof JobOrder, header: "Customer Name" },
 	{ accessorKey: "address" as keyof JobOrder, header: "Address" },
 	{ accessorKey: "phoneNumber" as keyof JobOrder, header: "Phone Number" },
-	{ accessorKey: "monthlyFee" as keyof JobOrder, header: "Monthly Fee" },
 	{ accessorKey: "description" as keyof JobOrder, header: "Description" },
 	{ accessorKey: "cost" as keyof JobOrder, header: "Cost" },
 	{ accessorKey: "technician" as keyof JobOrder, header: "Technician" },
@@ -154,10 +148,7 @@ const columns = [
 		accessorKey: "phoneNumber",
 		header: "Phone Number",
 	},
-	{
-		accessorKey: "monthlyFee",
-		header: "Monthly Fee",
-	},
+
 	{
 		accessorKey: "description",
 		header: "Description",
@@ -326,15 +317,16 @@ const JobOrder = () => {
 					<h1 className="text-2xl font-bold">Job Order</h1>
 					<ActionModal
 						type="add"
-						columns={columns}
-						nonEditableKeys={["id", "dateCreated"]} // fields that cannot be edited
-						onSubmit={(newData) => console.log("Added:", newData)} // handle the new record
+						columns={modalColumns}
+						nonEditableKeys={["id", "dateCreated"]}
+						onSubmit={(newData) => console.log("Added:", newData)}
 						options={{
 							descriptions,
 							cost,
 							status,
 							technicians,
 						}}
+						jobOrders={data} // ✅ Correct prop for your array
 						trigger={
 							<button className="p-2 cursor-pointer rounded">
 								<CirclePlus size={20} />

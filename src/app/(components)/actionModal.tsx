@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import * as React from "react";
 import {
 	Dialog,
@@ -52,6 +53,7 @@ type ActionModalProps<T extends Record<string, string | string[] | number>> = {
 		remarks?: string[];
 		amountPaid?: string[];
 	};
+	jobOrders?: T[];
 };
 
 type HandleInputChange<T> = (e: {
@@ -68,6 +70,7 @@ export function ActionModal<
 	columns,
 	nonEditableKeys,
 	options,
+	jobOrders,
 }: ActionModalProps<T>) {
 	const [open, setOpen] = React.useState(false);
 	const [formData, setFormData] = React.useState<T>(data as T);
@@ -85,12 +88,54 @@ export function ActionModal<
 		}
 	}, [data, type, columns]);
 
+	const [suggestions, setSuggestions] = React.useState<T[]>([]);
+	const [activeField, setActiveField] = React.useState<string | null>(null);
+
 	const handleInputChange: HandleInputChange<T> = (e) => {
 		const { name, value } = e.target;
+
 		setFormData((prev) => ({
 			...prev,
 			[name]: value,
 		}));
+
+		setActiveField(String(name)); // ✅ cast to string
+
+		if (
+			["accountNo", "customerName"].includes(String(name)) &&
+			options?.status
+		) {
+			const lower = String(value).toLowerCase();
+
+			const matches =
+				jobOrders?.filter((item) => {
+					if (String(name) === "accountNo")
+						return String(item.accountNo)
+							.toLowerCase()
+							.includes(lower);
+					if (String(name) === "customerName")
+						return String(item.customerName)
+							.toLowerCase()
+							.includes(lower);
+					return false;
+				}) || [];
+
+			setSuggestions(matches);
+		} else {
+			setSuggestions([]);
+		}
+	};
+
+	const handleSelectSuggestion = (item: T) => {
+		setFormData((prev) => ({
+			...prev,
+			accountNo: item.accountNo,
+			customerName: item.customerName,
+			address: item.address,
+			phoneNumber: item.phoneNumber,
+		}));
+		setSuggestions([]);
+		setActiveField(null); // ✅ Hide dropdown after selection
 	};
 
 	const handleSubmit = () => {
@@ -644,19 +689,67 @@ export function ActionModal<
 												</div>
 											) : (
 												// ✅ Default Input
-												<Input
-													name={key}
-													value={
-														formData[key as keyof T]
-													}
-													onChange={handleInputChange}
-													className={`mt-1 ${
-														isReadOnly
-															? "bg-gray-100 cursor-not-allowed"
-															: ""
-													}`}
-													readOnly={isReadOnly}
-												/>
+												<div className="relative">
+													<Input
+														name={key}
+														value={
+															formData[
+																key as keyof T
+															]
+														}
+														onChange={
+															handleInputChange
+														}
+														onFocus={() =>
+															setActiveField(key)
+														} // track focus
+														autoComplete="new-password"
+														autoCorrect="off"
+														autoCapitalize="off"
+														spellCheck={false}
+														className={`mt-1 ${
+															isReadOnly
+																? "bg-gray-100 cursor-not-allowed"
+																: ""
+														}`}
+														readOnly={isReadOnly}
+													/>
+
+													{/* 🧩 Show dropdown only for the active input */}
+													{[
+														"accountNo",
+														"customerName",
+													].includes(key) &&
+														activeField === key &&
+														suggestions.length >
+															0 && (
+															<ul className="absolute z-10 bg-white border rounded-md shadow-md w-full mt-1 max-h-40 overflow-auto">
+																{suggestions.map(
+																	(item) => (
+																		<li
+																			key={String(
+																				item.id
+																			)}
+																			className="p-2 hover:bg-gray-100 cursor-pointer text-sm"
+																			onClick={() =>
+																				handleSelectSuggestion(
+																					item
+																				)
+																			}
+																		>
+																			{
+																				item.accountNo
+																			}{" "}
+																			—{" "}
+																			{
+																				item.customerName
+																			}
+																		</li>
+																	)
+																)}
+															</ul>
+														)}
+												</div>
 											)}
 										</div>
 									);
