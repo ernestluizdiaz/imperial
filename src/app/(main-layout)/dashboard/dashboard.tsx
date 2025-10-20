@@ -115,23 +115,47 @@ const Dashboard = () => {
 				{modeOfPayment.map((mode) => (
 					<div
 						key={mode}
-						className="flex flex-col gap-5 border p-6 rounded-lg border-[#E4E4E7]"
+						className="flex flex-col justify-between p-6 rounded-2xl shadow-md border border-gray-200 bg-white hover:shadow-lg transition-shadow duration-200"
 					>
-						<p className="font-bold text-2xl">{mode} Payment</p>
-						<p className="font-bold text-2xl">
+						<div className="flex justify-between items-center">
+							<p className="text-lg font-semibold text-gray-800">
+								{mode} Payment
+							</p>
+							<span
+								className={`px-3 py-1 text-xs font-medium rounded-full ${
+									mode === "Gcash"
+										? "bg-blue-100 text-blue-700"
+										: "bg-green-100 text-green-700"
+								}`}
+							>
+								{mode}
+							</span>
+						</div>
+
+						<p className="text-3xl font-bold mt-4 text-gray-900">
 							{paymentStats[mode]}
 						</p>
-						<Progress
-							value={Math.min(
-								(paymentStats[mode] / 600) * 100,
-								100
-							)}
-							className={
-								mode === "Gcash"
-									? "[&>div]:bg-[#007AFF]" // GCash blue
-									: "[&>div]:bg-[#28A745]" // Cash green
-							}
-						/>
+
+						<div className="mt-4">
+							<Progress
+								value={Math.min(
+									(paymentStats[mode] / 600) * 100,
+									100
+								)}
+								className={`h-3 rounded-full ${
+									mode === "Gcash"
+										? "[&>div]:bg-[#007AFF]"
+										: "[&>div]:bg-[#28A745]"
+								}`}
+							/>
+							<p className="text-sm text-gray-500 mt-1">
+								{Math.min(
+									(paymentStats[mode] / 600) * 100,
+									100
+								).toFixed(0)}
+								% of monthly goal
+							</p>
+						</div>
 					</div>
 				))}
 			</div>

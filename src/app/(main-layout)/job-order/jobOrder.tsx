@@ -24,36 +24,55 @@ import {
 } from "@tanstack/react-table";
 import ActionModal from "@/app/(components)/actionModal";
 
-type Customer = {
-	id: number;
-	accountNo: string;
-	customerName: string;
-	phoneNumber: string;
-	address: string;
-	masterListStatus: string;
-	monthlyFee: string;
-	masterListRemarks: string;
-	registeredDate: string;
-};
-
 type Column<T> = {
 	accessorKey?: keyof T;
 	header?: string;
 };
 
-const masterListStatus = ["Active", "Non-Active"];
+type JobOrder = {
+	id: number;
+	accountNo: string;
+	customerName: string;
+	address: string;
+	phoneNumber: string;
+	monthlyFee: string;
+	description: string;
+	cost: string;
+	technician: string[];
+	status: string;
+	dateCreated: string;
+};
 
-const data: Customer[] = [
+const descriptions = [
+	"No Power",
+	"Limited Connection",
+	"Slow Internet",
+	"Upgrade",
+	"Downgrade",
+	"Relocation",
+	"Change modem",
+	"Other",
+];
+
+const cost = ["500", "1000", "1500", "Free"];
+const status = ["Done", "Pending", "In Progress", "Cancelled"];
+
+const technicians = ["Alvarez", "Reyes", "Valdez", "Santos", "Cruz"];
+const pickTechs = (...indexes: number[]) => indexes.map((i) => technicians[i]);
+
+const data: JobOrder[] = [
 	{
 		id: 1,
 		accountNo: "202314002",
 		customerName: "Herrera, Lyka Joy",
 		phoneNumber: "639569675693",
 		address: "Block 81 Lot 7 Parkstone Estate",
-		masterListStatus: masterListStatus[0],
 		monthlyFee: "₱1,000",
-		masterListRemarks: "penge barya",
-		registeredDate: "14/06/2023",
+		description: descriptions[0],
+		cost: cost[1],
+		technician: pickTechs(0, 2),
+		status: status[0],
+		dateCreated: "14/06/2023",
 	},
 	{
 		id: 2,
@@ -61,28 +80,56 @@ const data: Customer[] = [
 		customerName: "Vallente, Genovela",
 		phoneNumber: "639569675693",
 		address: "Block 54 Lot 4 Hyacinth Residences",
-		masterListStatus: masterListStatus[1],
 		monthlyFee: "₱800",
-		masterListRemarks: "Nagbabayad pero onti",
-		registeredDate: "19/10/2023",
+		description: descriptions[1],
+		cost: cost[0],
+		technician: pickTechs(1, 3),
+		status: status[1],
+
+		dateCreated: "19/10/2023",
+	},
+	{
+		id: 3,
+		accountNo: "202320007",
+		customerName: "Santos, Mark",
+		phoneNumber: "639123456789",
+		address: "Block 10 Lot 2 Green Meadows",
+		monthlyFee: "₱1,200",
+		description: descriptions[2],
+		cost: cost[3],
+		technician: pickTechs(0, 3),
+		status: status[2],
+		dateCreated: "05/01/2024",
+	},
+	{
+		id: 4,
+		accountNo: "202321009",
+		customerName: "Lopez, Anna",
+		phoneNumber: "639987654321",
+		address: "Block 22 Lot 5 Blue Ridge",
+		monthlyFee: "₱900",
+		description: descriptions[3],
+		cost: cost[2],
+		technician: pickTechs(2, 3),
+		status: status[3],
+		dateCreated: "12/03/2024",
 	},
 ];
 
-const modalColumns: Column<Customer>[] = [
-	{ accessorKey: "id" as keyof Customer, header: "ID" },
-	{ accessorKey: "accountNo" as keyof Customer, header: "Account No." },
-	{ accessorKey: "customerName" as keyof Customer, header: "Customer Name" },
-	{ accessorKey: "phoneNumber" as keyof Customer, header: "Phone Number" },
-	{ accessorKey: "address" as keyof Customer, header: "Address" },
-	{ accessorKey: "masterListStatus" as keyof Customer, header: "Status" },
-	{ accessorKey: "monthlyFee" as keyof Customer, header: "Monthly Fee" },
+const modalColumns: Column<JobOrder>[] = [
+	{ accessorKey: "id" as keyof JobOrder, header: "ID" },
+	{ accessorKey: "accountNo" as keyof JobOrder, header: "Account No." },
+	{ accessorKey: "customerName" as keyof JobOrder, header: "Customer Name" },
+	{ accessorKey: "address" as keyof JobOrder, header: "Address" },
+	{ accessorKey: "phoneNumber" as keyof JobOrder, header: "Phone Number" },
+	{ accessorKey: "monthlyFee" as keyof JobOrder, header: "Monthly Fee" },
+	{ accessorKey: "description" as keyof JobOrder, header: "Description" },
+	{ accessorKey: "cost" as keyof JobOrder, header: "Cost" },
+	{ accessorKey: "technician" as keyof JobOrder, header: "Technician" },
+	{ accessorKey: "status" as keyof JobOrder, header: "Status" },
 	{
-		accessorKey: "masterListRemarks" as keyof Customer,
-		header: "Remarks",
-	},
-	{
-		accessorKey: "registeredDate" as keyof Customer,
-		header: "Registered Date",
+		accessorKey: "dateCreated" as keyof JobOrder,
+		header: "Date Created",
 	},
 ];
 
@@ -100,30 +147,65 @@ const columns = [
 		header: "Customer Name",
 	},
 	{
-		accessorKey: "phoneNumber",
-		header: "Phone Number",
-	},
-	{
 		accessorKey: "address",
 		header: "Address",
 	},
 	{
-		accessorKey: "masterListStatus",
+		accessorKey: "phoneNumber",
+		header: "Phone Number",
+	},
+	{
+		accessorKey: "monthlyFee",
+		header: "Monthly Fee",
+	},
+	{
+		accessorKey: "description",
+		header: "Description",
+	},
+	{
+		accessorKey: "cost",
+		header: "Cost",
+	},
+	{
+		accessorKey: "technician",
+		header: "Technician",
+	},
+	{
+		accessorKey: "status",
 		header: "Status",
 		cell: ({
 			row,
 		}: {
-			row: import("@tanstack/react-table").Row<Customer>;
+			row: import("@tanstack/react-table").Row<JobOrder>;
 		}) => {
-			const status = row.original.masterListStatus;
-			const active = status === "Active";
+			const status = row.original.status;
+
+			let badgeClass = "";
+			switch (status) {
+				case "Done":
+					badgeClass =
+						"bg-green-100 text-green-700 border-2 border-green-700";
+					break;
+				case "Pending":
+					badgeClass =
+						"bg-yellow-100 text-yellow-700 border-2 border-yellow-700";
+					break;
+				case "In Progress":
+					badgeClass =
+						"bg-blue-100 text-blue-700 border-2 border-blue-700";
+					break;
+				case "Cancelled":
+					badgeClass =
+						"bg-red-100 text-red-700 border-2 border-red-700";
+					break;
+				default:
+					badgeClass =
+						"bg-gray-100 text-gray-700 border-2 border-gray-700";
+			}
+
 			return (
 				<span
-					className={`inline-flex items-center justify-center min-w-[90px] px-3 py-1 text-xs font-medium rounded-full whitespace-nowrap ${
-						active
-							? "bg-green-100 text-green-700 border-2 border-green-700"
-							: "bg-red-100 text-red-700 border-2 border-red-700"
-					}`}
+					className={`inline-flex items-center justify-center min-w-[100px] px-3 py-1 text-xs font-medium rounded-full  ${badgeClass}`}
 				>
 					{status}
 				</span>
@@ -131,30 +213,25 @@ const columns = [
 		},
 	},
 	{
-		accessorKey: "monthlyFee",
-		header: "Monthly Fee",
-	},
-	{
-		accessorKey: "masterListRemarks",
-		header: "Remarks",
-	},
-	{
-		accessorKey: "registeredDate",
-		header: "Registered Date",
+		accessorKey: "dateCreated",
+		header: "Date Created",
 	},
 	{
 		id: "actions",
 		header: "Actions",
-		cell: ({ row }: { row: Row<Customer> }) => (
+		cell: ({ row }: { row: Row<JobOrder> }) => (
 			<div className="flex items-center gap-2">
 				<ActionModal
 					type="edit"
 					data={row.original}
-					columns={modalColumns} // ← use modalColumns here
-					nonEditableKeys={["id", "registeredDate"]} // skip these fields
+					columns={modalColumns}
+					nonEditableKeys={["id", "dateCreated"]}
 					onSubmit={(updated) => console.log("Edited data:", updated)}
 					options={{
-						masterListStatus,
+						descriptions,
+						cost,
+						status,
+						technicians,
 					}}
 					trigger={
 						<button className="p-1 hover:text-green-700">
@@ -177,7 +254,7 @@ const columns = [
 	},
 ];
 
-const Masterlist = () => {
+const JobOrder = () => {
 	const { setOpen } = useMenu();
 	const dropdownRef = useRef<HTMLDivElement>(null);
 	const [open, dropDownOpen] = useState(false);
@@ -228,10 +305,10 @@ const Masterlist = () => {
 				table.setSorting([{ id: "customerName", desc: false }]);
 				break;
 			case "Status":
-				table.setSorting([{ id: "masterListStatus", desc: false }]);
+				table.setSorting([{ id: "status", desc: false }]);
 				break;
 			case "Date Created":
-				table.setSorting([{ id: "registeredDate", desc: true }]);
+				table.setSorting([{ id: "dateCreated", desc: true }]);
 				break;
 			default:
 				table.resetSorting();
@@ -246,14 +323,17 @@ const Masterlist = () => {
 			{/* Header Row */}
 			<div className="flex flex-wrap justify-between items-center">
 				<div className="flex items-center ">
-					<h1 className="text-2xl font-bold">Masterlist</h1>
+					<h1 className="text-2xl font-bold">Job Order</h1>
 					<ActionModal
 						type="add"
 						columns={columns}
-						nonEditableKeys={["id", "registeredDate"]} // fields that cannot be edited
+						nonEditableKeys={["id", "dateCreated"]} // fields that cannot be edited
 						onSubmit={(newData) => console.log("Added:", newData)} // handle the new record
 						options={{
-							masterListStatus,
+							descriptions,
+							cost,
+							status,
+							technicians,
 						}}
 						trigger={
 							<button className="p-2 cursor-pointer rounded">
@@ -399,4 +479,4 @@ const Masterlist = () => {
 	);
 };
 
-export default Masterlist;
+export default JobOrder;
