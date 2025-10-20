@@ -373,7 +373,7 @@ export function ActionModal<
 														</SelectContent>
 													</Select>
 												</div>
-											) : key === "masterListstatus" ? (
+											) : key === "masterListStatus" ? (
 												// ✅ Status from props
 												<div className="mt-1">
 													<Select

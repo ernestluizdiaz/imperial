@@ -90,7 +90,6 @@ const PasswordField = ({
 );
 
 const Accounts = () => {
-	const [activeTab, setActiveTab] = useState("account");
 	const [formData, setFormData] = useState({
 		firstName: "Robin",
 		lastName: "Salcedo",
