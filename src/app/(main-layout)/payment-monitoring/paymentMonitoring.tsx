@@ -70,8 +70,8 @@ const data: Payment[] = [
 		customerName: "Herrera, Lyka Joy",
 		phoneNumber: "639569675693",
 		address: "Block 81 Lot 7 Parkstone Estate",
-		PMStatus: PMStatus[0],
 		monthlyFee: "₱800",
+		PMStatus: PMStatus[0],
 		paymentDate: "10/14/2025",
 		mop: mop[1],
 		amountPaid: amountPaid[0],
@@ -84,8 +84,8 @@ const data: Payment[] = [
 		customerName: "Vallente, Genovela",
 		phoneNumber: "639569675693",
 		address: "Block 54 Lot 4 Hyacinth Residences",
-		PMStatus: PMStatus[1],
 		monthlyFee: "₱800",
+		PMStatus: PMStatus[1],
 		paymentDate: "09/05/2025",
 		mop: mop[0],
 		amountPaid: amountPaid[1],
@@ -249,6 +249,7 @@ const columns = [
 						"customerName",
 						"phoneNumber",
 						"address",
+						"monthlyFee",
 					]} // fields that cannot be edited
 					onSubmit={(updated) => console.log("Edited data:", updated)}
 					options={{

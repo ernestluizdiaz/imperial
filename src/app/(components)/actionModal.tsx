@@ -494,6 +494,11 @@ export function ActionModal<
 												// ✅ Status from props
 												<div className="mt-1">
 													<Select
+														value={
+															formData[
+																key as keyof T
+															] as string
+														} // ✅ add this
 														onValueChange={(
 															newValue
 														) =>
@@ -527,6 +532,11 @@ export function ActionModal<
 												// ✅ Status from props
 												<div className="mt-1">
 													<Select
+														value={
+															formData[
+																key as keyof T
+															] as string
+														} // ✅ add this
 														onValueChange={(
 															newValue
 														) =>
@@ -560,6 +570,11 @@ export function ActionModal<
 												// ✅ Status from props
 												<div className="mt-1">
 													<Select
+														value={
+															formData[
+																key as keyof T
+															] as string
+														} // ✅ add this
 														onValueChange={(
 															newValue
 														) =>
